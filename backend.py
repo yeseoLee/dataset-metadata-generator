@@ -39,6 +39,7 @@ async def generate_metadata(
     creator: str = Form(None),
     datasetname: str = Form(None),
     preprocessing_steps: str = Form(None),
+    labeling_methods: str = Form(None),
     augmentation_methods: str = Form(None),
     is_gdrive_upload: bool = Form(None),
 ):
@@ -54,6 +55,7 @@ async def generate_metadata(
         preprocessing_dict = (
             json.loads(preprocessing_steps) if preprocessing_steps else None
         )
+        labeling_dict = json.loads(labeling_methods) if labeling_methods else None
         augmentation_dict = (
             json.loads(augmentation_methods) if augmentation_methods else None
         )
@@ -62,6 +64,7 @@ async def generate_metadata(
             creator=creator,
             datasetname=datasetname,
             preprocessing_steps=preprocessing_dict,
+            labeling_methods=labeling_dict,
             augmentation_methods=augmentation_dict,
         )
 

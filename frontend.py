@@ -4,6 +4,7 @@ import requests
 from components import (
     create_custom_input,
     username_options,
+    labeling_options,
     preprocessing_options,
     augmentation_options,
 )
@@ -38,6 +39,23 @@ if st.checkbox("전처리 단계 추가"):
                 {"step": step_name, "params": {"description": step_desc}}
             )
 
+# 라벨링 정보 입력
+st.header("라벨링 정보")
+labeling_methods = []
+if st.checkbox("라벨링 단계 추가"):
+    num_labeling = st.number_input("라벨링 단계 수", min_value=1, value=1)
+    for i in range(num_labeling):
+        st.subheader(f"라벨링 단계 {i+1}")
+        method_name = create_custom_input(
+            "라벨링 방법", f"prep_name_{i}", labeling_options
+        )
+        method_desc = st.text_input(f"라벨링 방법 설명", key=f"prep_desc_{i}")
+
+        if method_name and method_desc:
+            labeling_methods.append(
+                {"method": method_name, "params": {"description": method_desc}}
+            )
+
 # 증강 방법 입력
 st.header("데이터 증강 정보")
 augmentation_methods = []
@@ -68,6 +86,7 @@ if st.button("메타데이터 생성"):
     else:
         # JSON 문자열로 변환
         preprocessing_steps_json = json.dumps(preprocessing_steps, ensure_ascii=False)
+        labeling_methods_json = json.dumps(labeling_methods, ensure_ascii=False)
         augmentation_methods_json = json.dumps(augmentation_methods, ensure_ascii=False)
 
         # API 요청 보내기
@@ -75,6 +94,7 @@ if st.button("메타데이터 생성"):
         data = {
             "creator": username,
             "datasetname": datasetname,
+            "labeling_methods": labeling_methods,
             "preprocessing_steps": preprocessing_steps_json,
             "augmentation_methods": augmentation_methods_json,
             "is_gdrive_upload": is_gdrive_upload,

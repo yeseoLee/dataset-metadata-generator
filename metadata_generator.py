@@ -45,6 +45,11 @@ class MetadataGenerator:
         if preprocessing_steps:
             self.metadata["preprocessing_steps"] = preprocessing_steps
 
+    def add_labeling_info(self, labeling_methods):
+        """라벨링 정보 추가"""
+        if labeling_methods:
+            self.metadata["labeling_methods"] = labeling_methods
+
     def add_augmentation_info(self, augmentation_methods):
         """데이터 증강 정보 추가"""
         if augmentation_methods:
@@ -55,6 +60,7 @@ class MetadataGenerator:
         creator=None,
         datasetname=None,
         preprocessing_steps=None,
+        labeling_methods=None,
         augmentation_methods=None,
     ):
         """전체 메타데이터 생성"""
@@ -62,6 +68,7 @@ class MetadataGenerator:
         self.generate_text_statistics()
         self.generate_target_distribution()
         self.add_preprocessing_info(preprocessing_steps)
+        self.add_labeling_info(labeling_methods)
         self.add_augmentation_info(augmentation_methods)
         return self.metadata
 
