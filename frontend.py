@@ -44,10 +44,15 @@ if st.checkbox("증강 방법 추가"):
                 {"method": method_name, "params": {"description": method_desc}}
             )
 
+# 클라우드 업로드
+st.header("클라우드 업로드")
+if st.checkbox("구글 드라이브 업로드"):
+    is_gdrive_upload = True
+
 if st.button("메타데이터 생성"):
-    if uploaded_file is None:
+    if not uploaded_file:
         st.error("파일을 먼저 업로드해주세요")
-    elif datasetname is None:
+    elif not datasetname:
         st.error("데이터셋 이름을 입력해주세요")
     else:
         # preprocessing_steps와 augmentation_methods를 JSON 문자열로 변환
@@ -61,6 +66,7 @@ if st.button("메타데이터 생성"):
             "datasetname": datasetname,
             "preprocessing_steps": preprocessing_steps_json,
             "augmentation_methods": augmentation_methods_json,
+            "is_gdrive_upload": is_gdrive_upload,
         }
 
         response = requests.post(
@@ -69,19 +75,29 @@ if st.button("메타데이터 생성"):
             data=data,
         )
 
-        if response.status_code == 200:
-            metadata = response.json()
+        def _display_metadata(metadata, datasetname):
+            """메타데이터 표시 및 다운로드 버튼 생성"""
+            metadata_str = json.dumps(metadata, indent=2, ensure_ascii=False)
 
             # 다운로드 버튼
-            metadata_str = json.dumps(metadata, indent=2, ensure_ascii=False)
             st.download_button(
                 label="메타데이터 다운로드",
                 data=metadata_str.encode("utf-8"),
-                file_name="metadata.json",
+                file_name=f"{datasetname}.json",
                 mime="application/json",
             )
             # 메타데이터 표시
             st.json(metadata)
+
+        # 업로드 응답 처리
+        if response.status_code == 200:
+            st.write("드라이브 업로드 성공!")
+            metadata = response.json()
+            _display_metadata(metadata, datasetname)
+        elif response.status_code == 207:
+            st.write("드라이브 업로드 실패! 직접 업로드하세요.")
+            metadata = response.json()
+            _display_metadata(metadata, datasetname)
         else:
             st.error(f"에러 발생: {response.text}")
 
