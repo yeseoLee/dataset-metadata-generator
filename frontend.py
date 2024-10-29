@@ -9,9 +9,10 @@ st.title("데이터셋 메타데이터 생성기")
 # 파일 업로드
 uploaded_file = st.file_uploader("데이터셋 CSV 파일을 업로드하세요", type=["csv"])
 
-# 실험자 정보
-st.header("실험자 정보")
+# 실험 정보
+st.header("실험 정보")
 username = st.text_input(f"실험자 이름", key=f"user_name")
+datasetname = st.text_input(f"데이터셋 이름", key=f"dataset_name")
 
 # 전처리 정보 입력
 st.header("전처리 정보")
@@ -53,6 +54,7 @@ if st.button("메타데이터 생성"):
         files = {"file": uploaded_file}
         data = {
             "creator": username,
+            "datasetname": datasetname,
             "preprocessing_steps": preprocessing_steps_json,
             "augmentation_methods": augmentation_methods_json,
         }

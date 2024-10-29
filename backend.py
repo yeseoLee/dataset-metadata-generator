@@ -38,6 +38,7 @@ app.add_middleware(
 async def generate_metadata(
     file: UploadFile = File(...),
     creator: str = Form(None),
+    datasetname: str = Form(None),
     preprocessing_steps: str = Form(None),
     augmentation_methods: str = Form(None),
 ):
@@ -59,6 +60,7 @@ async def generate_metadata(
 
         metadata = metadata_generator.generate_full_metadata(
             creator=creator,
+            datasetname=datasetname,
             preprocessing_steps=preprocessing_dict,
             augmentation_methods=augmentation_dict,
         )
