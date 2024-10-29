@@ -42,14 +42,14 @@ if st.checkbox("전처리 단계 추가"):
 # 라벨링 정보 입력
 st.header("라벨링 정보")
 labeling_methods = []
-if st.checkbox("라벨링 단계 추가"):
-    num_labeling = st.number_input("라벨링 단계 수", min_value=1, value=1)
+if st.checkbox("라벨링 방법 추가"):
+    num_labeling = st.number_input("라벨링 방법 수", min_value=1, value=1)
     for i in range(num_labeling):
-        st.subheader(f"라벨링 단계 {i+1}")
+        st.subheader(f"라벨링 방법 {i+1}")
         method_name = create_custom_input(
-            "라벨링 방법", f"prep_name_{i}", labeling_options
+            "라벨링 방법", f"lab_name_{i}", labeling_options
         )
-        method_desc = st.text_input(f"라벨링 방법 설명", key=f"prep_desc_{i}")
+        method_desc = st.text_input(f"라벨링 방법 설명", key=f"lab_desc_{i}")
 
         if method_name and method_desc:
             labeling_methods.append(
@@ -94,7 +94,7 @@ if st.button("메타데이터 생성"):
         data = {
             "creator": username,
             "datasetname": datasetname,
-            "labeling_methods": labeling_methods,
+            "labeling_methods": labeling_methods_json,
             "preprocessing_steps": preprocessing_steps_json,
             "augmentation_methods": augmentation_methods_json,
             "is_gdrive_upload": is_gdrive_upload,
@@ -135,4 +135,5 @@ if st.button("메타데이터 생성"):
 # 입력된 정보 확인을 위한 디버그 섹션
 if st.checkbox("입력된 정보 확인"):
     st.write("전처리 단계:", preprocessing_steps)
+    st.write("라벨링 방법:", labeling_methods)
     st.write("증강 방법:", augmentation_methods)
