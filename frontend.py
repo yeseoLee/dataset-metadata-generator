@@ -45,7 +45,11 @@ if st.checkbox("증강 방법 추가"):
             )
 
 if st.button("메타데이터 생성"):
-    if uploaded_file is not None:
+    if uploaded_file is None:
+        st.error("파일을 먼저 업로드해주세요")
+    elif datasetname is None:
+        st.error("데이터셋 이름을 입력해주세요")
+    else:
         # preprocessing_steps와 augmentation_methods를 JSON 문자열로 변환
         preprocessing_steps_json = json.dumps(preprocessing_steps, ensure_ascii=False)
         augmentation_methods_json = json.dumps(augmentation_methods, ensure_ascii=False)
@@ -80,8 +84,6 @@ if st.button("메타데이터 생성"):
             st.json(metadata)
         else:
             st.error(f"에러 발생: {response.text}")
-    else:
-        st.error("파일을 먼저 업로드해주세요")
 
 # 입력된 정보 확인을 위한 디버그 섹션
 if st.checkbox("입력된 정보 확인"):
