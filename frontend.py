@@ -1,6 +1,13 @@
 import streamlit as st
 import json
 import requests
+from components import (
+    create_custom_input,
+    username_options,
+    preprocessing_options,
+    augmentation_options,
+)
+
 
 st.set_page_config(page_title="데이터셋 메타데이터 생성기", layout="wide")
 
@@ -11,7 +18,7 @@ uploaded_file = st.file_uploader("데이터셋 CSV 파일을 업로드하세요"
 
 # 실험 정보
 st.header("실험 정보")
-username = st.text_input(f"실험자 이름", key=f"user_name")
+username = create_custom_input("실험자 이름", "user_name", username_options)
 datasetname = st.text_input(f"데이터셋 이름", key=f"dataset_name")
 
 # 전처리 정보 입력
@@ -21,10 +28,12 @@ if st.checkbox("전처리 단계 추가"):
     num_preprocessing = st.number_input("전처리 단계 수", min_value=1, value=1)
     for i in range(num_preprocessing):
         st.subheader(f"전처리 단계 {i+1}")
-        step_name = st.text_input(f"전처리 방법 이름", key=f"prep_name_{i}")
+        step_name = create_custom_input(
+            "전처리 방법", f"prep_name_{i}", preprocessing_options
+        )
         step_desc = st.text_input(f"전처리 방법 설명", key=f"prep_desc_{i}")
 
-        if step_name and step_desc:  # 둘 다 입력된 경우에만 추가
+        if step_name and step_desc:
             preprocessing_steps.append(
                 {"step": step_name, "params": {"description": step_desc}}
             )
@@ -36,10 +45,12 @@ if st.checkbox("증강 방법 추가"):
     num_augmentation = st.number_input("증강 방법 수", min_value=1, value=1)
     for i in range(num_augmentation):
         st.subheader(f"증강 방법 {i+1}")
-        method_name = st.text_input(f"증강 방법 이름", key=f"aug_name_{i}")
+        method_name = create_custom_input(
+            "증강 방법", f"aug_name_{i}", augmentation_options
+        )
         method_desc = st.text_input(f"증강 방법 설명", key=f"aug_desc_{i}")
 
-        if method_name and method_desc:  # 둘 다 입력된 경우에만 추가
+        if method_name and method_desc:
             augmentation_methods.append(
                 {"method": method_name, "params": {"description": method_desc}}
             )
@@ -55,7 +66,7 @@ if st.button("메타데이터 생성"):
     elif not datasetname:
         st.error("데이터셋 이름을 입력해주세요")
     else:
-        # preprocessing_steps와 augmentation_methods를 JSON 문자열로 변환
+        # JSON 문자열로 변환
         preprocessing_steps_json = json.dumps(preprocessing_steps, ensure_ascii=False)
         augmentation_methods_json = json.dumps(augmentation_methods, ensure_ascii=False)
 
