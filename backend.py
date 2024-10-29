@@ -69,7 +69,7 @@ async def generate_metadata(
         )
 
         # NumPy 타입을 포함한 JSON 직렬화
-        json_str = json.dumps(metadata, cls=NumpyEncoder, ensure_ascii=False)
+        json_str = json.dumps(metadata, cls=NumpyEncoder, indent=4, ensure_ascii=False)
 
         # GDrive 업로드
         if is_gdrive_upload:
