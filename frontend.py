@@ -149,7 +149,7 @@ if __name__ == "__main__":
         <style>
             /* 기본 입력 요소 */
             [data-testid="stForm"] {
-                max-width: 800px;
+                max-width: 400px;
             }
             
             /* number_input만 작게 */
@@ -158,7 +158,7 @@ if __name__ == "__main__":
             }
             
             .block-container {
-                max-width: 1200px;
+                max-width: 800px;
                 padding: 2rem;
             }
         </style>
