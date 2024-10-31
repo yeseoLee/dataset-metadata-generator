@@ -9,11 +9,12 @@ class MetadataGenerator:
         self.output_path = output_path
         self.metadata = {}
 
-    def generate_basic_info(self, creator, datasetname):
+    def generate_basic_info(self, creator, datasetname, description):
         """기본 데이터셋 정보 생성"""
-        self.metadata["datasetname"] = datasetname
         self.metadata["creation_date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.metadata["creator"] = creator
+        self.metadata["datasetname"] = datasetname
+        self.metadata["description"] = description
         self.metadata["total_samples"] = len(self.dataset)
         self.metadata["columns"] = list(self.dataset.columns)
 
@@ -59,12 +60,13 @@ class MetadataGenerator:
         self,
         creator=None,
         datasetname=None,
+        description=None,
         preprocessing_steps=None,
         labeling_methods=None,
         augmentation_methods=None,
     ):
         """전체 메타데이터 생성"""
-        self.generate_basic_info(creator, datasetname)
+        self.generate_basic_info(creator, datasetname, description)
         self.generate_text_statistics()
         self.generate_target_distribution()
         self.add_preprocessing_info(preprocessing_steps)

@@ -21,6 +21,9 @@ uploaded_file = st.file_uploader("데이터셋 CSV 파일을 업로드하세요"
 st.header("실험 정보")
 username = create_custom_input("실험자 이름", "user_name", username_options)
 datasetname = st.text_input(f"데이터셋 이름", key=f"dataset_name")
+description = st.text_input(
+    f"데이터셋에 대한 간단한 설명을 남겨주세요", key=f"description"
+)
 
 # 전처리 정보 입력
 st.header("전처리 정보")
@@ -35,9 +38,7 @@ if st.checkbox("전처리 단계 추가"):
         step_desc = st.text_input(f"전처리 방법 설명", key=f"prep_desc_{i}")
 
         if step_name and step_desc:
-            preprocessing_steps.append(
-                {"step": step_name, "params": {"description": step_desc}}
-            )
+            preprocessing_steps.append({step_name: step_desc})
 
 # 라벨링 정보 입력
 st.header("라벨링 정보")
@@ -52,9 +53,7 @@ if st.checkbox("라벨링 방법 추가"):
         method_desc = st.text_input(f"라벨링 방법 설명", key=f"lab_desc_{i}")
 
         if method_name and method_desc:
-            labeling_methods.append(
-                {"method": method_name, "params": {"description": method_desc}}
-            )
+            labeling_methods.append({method_name: method_desc})
 
 # 증강 방법 입력
 st.header("데이터 증강 정보")
@@ -69,9 +68,7 @@ if st.checkbox("증강 방법 추가"):
         method_desc = st.text_input(f"증강 방법 설명", key=f"aug_desc_{i}")
 
         if method_name and method_desc:
-            augmentation_methods.append(
-                {"method": method_name, "params": {"description": method_desc}}
-            )
+            augmentation_methods.append({method_name: method_desc})
 
 # 클라우드 업로드
 st.header("클라우드 업로드")
@@ -94,6 +91,7 @@ if st.button("메타데이터 생성"):
         data = {
             "creator": username,
             "datasetname": datasetname,
+            "description": description,
             "labeling_methods": labeling_methods_json,
             "preprocessing_steps": preprocessing_steps_json,
             "augmentation_methods": augmentation_methods_json,

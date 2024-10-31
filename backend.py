@@ -63,6 +63,7 @@ async def generate_metadata(
         metadata = metadata_generator.generate_full_metadata(
             creator=creator,
             datasetname=datasetname,
+            description=description,
             preprocessing_steps=preprocessing_dict,
             labeling_methods=labeling_dict,
             augmentation_methods=augmentation_dict,
