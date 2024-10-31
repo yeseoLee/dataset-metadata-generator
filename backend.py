@@ -38,6 +38,7 @@ async def generate_metadata(
     file: UploadFile = File(...),
     creator: str = Form(None),
     datasetname: str = Form(None),
+    description: str = Form(None),
     preprocessing_steps: str = Form(None),
     labeling_methods: str = Form(None),
     augmentation_methods: str = Form(None),
