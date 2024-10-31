@@ -70,6 +70,7 @@ def main():
 
     # 클라우드 업로드
     st.header("클라우드 업로드")
+    is_gdrive_upload = False
     if st.checkbox("구글 드라이브 업로드"):
         is_gdrive_upload = True
 
@@ -97,7 +98,7 @@ def main():
                 "labeling_methods": labeling_methods_json,
                 "preprocessing_steps": preprocessing_steps_json,
                 "augmentation_methods": augmentation_methods_json,
-                "is_gdrive_upload": is_gdrive_upload,
+                "is_gdrive_upload": is_gdrive_upload if is_gdrive_upload else None,
             }
 
             response = requests.post(
