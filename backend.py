@@ -72,6 +72,7 @@ async def generate_metadata(
 
         # NumPy 타입을 포함한 JSON 직렬화
         json_str = json.dumps(metadata, cls=NumpyEncoder, indent=4, ensure_ascii=False)
+        response_content = json.loads(json_str)
 
         # GDrive 업로드
         if is_gdrive_upload:
@@ -83,9 +84,13 @@ async def generate_metadata(
             uploaded_json = drive_manager.upload_json_data(
                 json_str, f"{datasetname}_metadata.json", folder_id
             )
+
+            gdrive_url = f"https://drive.google.com/drive/folders/{folder_id}"
+            response_content["gdrive_url"] = gdrive_url
+
             if not uploaded_df or not uploaded_json:
-                return JSONResponse(status_code=207, content=json.loads(json_str))
-        return JSONResponse(content=json.loads(json_str))
+                return JSONResponse(status_code=207, content=response_content)
+        return JSONResponse(content=response_content)
 
     except Exception as e:
         return JSONResponse(status_code=400, content={"error": str(e)})

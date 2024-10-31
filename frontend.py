@@ -21,8 +21,8 @@ uploaded_file = st.file_uploader("데이터셋 CSV 파일을 업로드하세요"
 st.header("실험 정보")
 username = create_custom_input("실험자 이름", "user_name", username_options)
 datasetname = st.text_input(f"데이터셋 이름", key=f"dataset_name")
-description = st.text_input(
-    f"데이터셋에 대한 간단한 설명을 남겨주세요", key=f"description"
+description = st.text_area(
+    f"데이터셋에 대한 간단한 설명을 남겨주세요", key=f"description", height=50
 )
 
 # 전처리 정보 입력
@@ -120,8 +120,10 @@ if st.button("메타데이터 생성"):
 
         # 업로드 응답 처리
         if response.status_code == 200:
-            st.write("드라이브 업로드 성공!")
-            metadata = response.json()
+            response_data = response.json()
+            gdrive_url = response_data.pop("gdrive_url", None)
+            metadata = response_data
+            st.write(f"드라이브 업로드 성공: {gdrive_url}")
             _display_metadata(metadata, datasetname)
         elif response.status_code == 207:
             st.write("드라이브 업로드 실패! 직접 업로드하세요.")
