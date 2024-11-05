@@ -26,16 +26,26 @@ class GoogleDriveManager:
 
     def get_drive_service(self):
         creds = None
+        # 토큰 파일 존재 확인
         if os.path.exists(TOKEN):
             creds = Credentials.from_authorized_user_file(TOKEN, SCOPES)
 
+        # offline access를 위한 설정
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS, SCOPES)
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    CREDENTIALS,
+                    SCOPES,
+                    # offline access 설정 추가
+                    access_type="offline",
+                    # 강제로 refresh token 재발급
+                    prompt="consent",
+                )
                 creds = flow.run_local_server(port=0)
 
+            # 토큰 저장
             with open(TOKEN, "w") as token:
                 token.write(creds.to_json())
 
