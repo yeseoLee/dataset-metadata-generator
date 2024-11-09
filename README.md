@@ -1,5 +1,64 @@
 # dataset-metadata-generator
-데이터 전처리 및 증강 방법과 데이터셋의 통계 정보를 json 파일로 생성
+데이터 전처리 및 증강 방법과 데이터셋의 통계 정보를 json 파일로 생성 및 구글 드라이브 업로드
+
+# 사용 예시
+<img width="600" alt="image" src="https://github.com/user-attachments/assets/7a4f593e-e9bb-46b8-a3bc-ee629b24c38f">
+<img width="600" alt="image" src="https://github.com/user-attachments/assets/eb276510-45ea-4e93-90ee-c19ee6d9d63c">
+<img width="600" alt="image" src="https://github.com/user-attachments/assets/8b98a93c-b57b-44e8-8cce-510e9d74035d">
+
+## 생성된 json 메타데이터 
+```json
+{
+    "datasetname": "10_ra_5600_bt_agument_x2",
+    "creation_date": "2024-10-29 23:50:58",
+    "creator": "예서",
+    "total_samples": 5600,
+    "columns": [
+        "ID",
+        "text",
+        "target"
+    ],
+    "text_statistics": {
+        "avg_length": 27.19214285714286,
+        "max_length": 41,
+        "min_length": 8,
+        "total_words": 15104,
+        "avg_words": 5.394285714285714
+    },
+    "target_distribution": {
+        "class_distribution": {
+            "5": 838,
+            "1": 820,
+            "4": 812,
+            "0": 796,
+            "6": 790,
+            "2": 776,
+            "3": 770
+        },
+        "num_classes": 7,
+        "class_balance": {
+            "5": 0.14964285714285713,
+            "1": 0.14642857142857144,
+            "4": 0.145,
+            "0": 0.1417857142857143,
+            "6": 0.14107142857142857,
+            "2": 0.13857142857142857,
+            "3": 0.1375
+        }
+    },
+    "preprocessing_steps": [
+        {
+            "LLM": "EXAONE-3.0 8B / prompt_denoise_v1 / is_noise에 대해 복구"
+        }
+    ],
+    "augmentation_methods": [
+        {
+            "역번역": "pororo기반 한국어-영어-한국어 2배 증강"
+        }
+    ]
+}
+```
+
 
 # 사용법
 
@@ -18,95 +77,4 @@ streamlit run frontend.py
 ## metadata_generator.py 직접 실행
 ```bash
 python metadata_generator.py
-```
-
-## 결과
-```json
-[
-    {
-        "creation_date":"2024-10-29 01:44:48",
-        "creator":"yeseo",
-        "total_samples":8,
-        "columns":[
-            "ID",
-            "text",
-            "target"
-        ],
-        "text_statistics":{
-            "avg_length":7.125,
-            "max_length":16,
-            "min_length":3,
-            "total_words":15,
-            "avg_words":1.875
-        },
-        "target_distribution":{
-            "class_distribution":{
-                "6":2,
-                "0":1,
-                "1":1,
-                "2":1,
-                "3":1,
-                "4":1,
-                "5":1
-            },
-            "num_classes":7,
-            "class_balance":{
-                "6":0.25,
-                "0":0.125,
-                "1":0.125,
-                "2":0.125,
-                "3":0.125,
-                "4":0.125,
-                "5":0.125
-            }
-        },
-        "preprocessing_steps":[
-            {
-                "step":"품사_제거",
-                "applied":true
-            },
-            {
-                "step":"특수문자_제거",
-                "targets":[
-                    "조사",
-                    "부사",
-                    "형용사"
-                ]
-            },
-            {
-                "step":"UNK_제거",
-                "applied":true
-            }
-        ],
-        "augmentation_methods":[
-            {
-                "method":"역번역",
-                "languages":[
-                    "en",
-                    "ko"
-                ]
-            },
-            {
-                "method":"동의어_대체",
-                "num_replacements":2
-            },
-            {
-                "method":"KorEDA",
-                "operation":[
-                    "sr",
-                    "ri",
-                    "rs",
-                    "rd"
-                ],
-                "alpha":[
-                    0.1,
-                    0.1,
-                    0.1,
-                    0.1
-                ],
-                "num_aug":9
-            }
-        ]
-    }
-]
 ```
